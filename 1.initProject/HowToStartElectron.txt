@@ -1,6 +1,16 @@
 1. 새로운 NodeJS 프로젝트를 만들고 Electron 설치
     npm init -y && npm i -D electron
 
+	npm init -y  : 
+	새로운 Node.js 프로젝트를 초기화합니다. 이 명령어를 실행하면 package.json 파일이 생성 + -y: 대화형 입력 없이 기본 설정으로 package.json 파일을 자동 
+	즉, -y를 더함으로 package.js 의 기본 값을 사용해 자동으로 설정한다는 뜻,
+
+	
+	npm i -D electron :
+	npm i -  npm install의 축약형으로, 지정한 패키지를 설치
+	-D: **--save-dev**의 축약형으로, 개발 의존성(devDependencies)으로 패키지를 설치
+		즉, 개발 환경에서만 필요한 패키지만 설치한다는 뜻,
+
 2. package.json 에서 start script를 변경
     초기 : 
         "script" : {

@@ -1,0 +1,99 @@
+이 프로그램(이후 '앱' 이라는 단어는 프로그램과 같은 의미로 쓰인다)은 이전 단계의 폴더인 1.initProject 에서 이어간다.
+
+0. 메뉴를 추가하기 이전 실행해보면 기본 메뉴가 설정되어있긴 하다.
+
+1. 메뉴를 지정해주기위해 우선 require 하는 부분에서 Menu를 import 해준다.
+
+    const  {app, BrowserWindow, Menu} = require("electron");
+
+
+2. 앱에서 보여줄 메뉴를 지정해주기위해 main.js에 코드를 추가한다. 2개정도 만들어보자
+    ---- main.js ----
+
+        const NLMenu = [
+            {
+                label : "myMenu",       << 1번 메뉴의 이름
+                submenu : [],           << n번 메뉴가 가지는 서브 메뉴
+            },
+            {
+                label : "eat 🍕",       << 2번 메뉴의 이름
+                submenu : [],
+            },
+        ]
+
+    메뉴를 지정한 NLMenu라는 메뉴를 선언한다.
+
+3. 이제 지정한 NLMenu를 앱에 넣어주도록 하자  
+    --- main.js ---
+            // 내가 만든 NLMenu를 Electron에서 사용할 메뉴로 만든것을 customMenu 라는 변수에 저장
+        const customMenu = Menu.buildFromTemplate(NLMenu);
+
+            // customMenu를 앱의 메뉴로 set
+        Menu.setApplicationMenu(customMenu);
+
+
+4. npm run start 하면 내가 만든 메뉴가 2개 생긴것을 볼 수 있다.
+    하지만 메뉴아래에 submenu가 없기 때문에 현재까진 아무런 기능을 할 수 없다.
+
+
+5. menu에 submenu를 추가해보자.
+    --- main.js --- 
+    const NLMenu = [
+        {
+            label : "myMenu",
+            submenu : [
+                {
+                    role : "about",
+                },
+                {
+                    type : "separator",
+                },
+                {
+                    role : "quit",
+                },
+            ],
+        },
+        {
+            label : "eat 🍕",
+            submenu : [
+                {
+                    label : "Hello",
+                    click : () => {
+                        window.webContents.executeJavaScript(`
+                            testFunction();
+                        `)
+                    }
+                },
+                {
+                    type : "separator",
+                },
+                {
+                    label : "Reset Preferences",
+                    click : () => {
+                        window.webContents.executeJavaScript(`
+                            localStorage.clear();
+                            window.location.reload();
+                        `)
+                    }
+                }
+            ],
+        },
+    ]
+
+    *** 설명 : about , separator , quit 는 기본 메뉴에 있는 동작을 호출하는 예약어 같은 메뉴이다.
+        about(role) : Electron의 버전을 보여줌
+        separator(type) : 메뉴의 구분선 ----- 을 만들어줌
+        quit(role) : 앱을 끈다.
+
+        label 하단에 click : () => {} 이렇게 하여 코드를 집어넣는다 
+        {} 내부에는 window.webContents.executeJavaScript(`자바스크립트코드`) 와 같이 작성한다. 
+
+    *** 중요! : window.webContents.executeJavaScript()는 Electron의 메인 프로세스에서 렌더러 프로세스로 JavaScript 코드를 실행시키는 방법이다. 
+        위의 방법을 이용하여 Electron에서 JS함수를 호출할 수 있다.
+            webContents: 렌더러 프로세스의 웹 페이지와 통신할 수 있는 객체
+            executeJavaScript: 렌더러 프로세스의 웹 페이지에서 특정 JavaScript 코드를 실행
+
+        
+    *** Plus! Reset Preferences 에 연결된 Javascript로  아래와 같은 코드는 다음과같은 동작을 한다.  자주 쓸 수 있는 메뉴이다.
+        localStorage.clear();  -->  로컬 스토리지 삭제
+        window.location.reload(); --> 윈도우를 다시 로드

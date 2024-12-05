@@ -1,0 +1,49 @@
+1. 새로운 NodeJS 프로젝트를 만들고 Electron 설치
+    npm init -y && npm i -D electron
+
+2. package.json 에서 start script를 변경
+    초기 : 
+        "script" : {
+            "test": "echo \"Error: no test specified\" && exit 1"
+        }
+    변경 : 
+        "script" : {
+            "start" : "electron ."
+        }
+
+3. package.json 에서 main 변경
+    초기 : 
+        "main": "index.js"
+    변경 :
+        "main": "main.js"
+
+4. main.js 로 실행할것이니 root폴더에 main.js 생성
+
+5. 생성한 main.js 에서 electron을 import 하고, 새로운 브라우저 윈도우를 생성하는 함수를 만들자
+main.js는 브라우저로 쓸 index.html을 불러올것이다.
+    -------main.js--------
+        const { app, BrowserWindow } = require("electron");
+        const createWindow = () => {
+            const window = new BrowserWindow({
+                width : 900,
+                height : 600,
+            });
+            window.loadFile("index.html");
+        }
+
+6. 앱이 준비가되면 함수를 부르게끔 함수를 호출하는 시퀀스를 추가
+    -------main.js--------
+        const { app, BrowserWindow } = require("electron");
+        const createWindow = () => {
+            const window = new BrowserWindow({
+                width : 900,
+                height : 600,
+            });
+            window.loadFile("index.html");
+        }
+
+        app.whenReady().then(() => {
+            createWindow();
+        })
+
+7. 이제 npm run start 를 하면 된다.

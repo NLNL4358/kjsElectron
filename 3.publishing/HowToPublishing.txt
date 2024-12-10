@@ -1,0 +1,113 @@
+## 앱 퍼블리싱은 즉, 빌드 , 배포 와 같은 의미를한다 npm run start로 실행하는게아닌 배포가능한 앱의 형태로 만든다는 뜻이다.
+
+1. 앱 퍼블리싱을 위해서는 다른 npm install 이 필요하다.
+"Electron Forge" 라는 패키지가 필요하다 
+그러기 위해서 터미널에 두가지를 입력을 해줘야한다.
+
+2. 터미널 입력 'npm install --save-dev @electron-forge/cli && npx electron-forge import'
+
+    주의!! - 경로상에 공백이 있으면 설치가 안된다! ~ ex 상위 폴더에 'electron folder'  이렇게 공백이있으면 Error가 발생한다
+
+    설명 1_ 'npm install --save-dev @electron-forge/cli'
+
+        --save-dev: 개발 환경에서만 필요한 패키지를 설치하고, package.json의 devDependencies 항목에 추가합니다.
+        @electron-forge/cli는 개발 도구로, 실제 배포된 앱에는 필요하지 않으므로 devDependencies로 관리합니다.
+
+        @electron-forge/cli란?
+            * Electron Forge의 명령줄 인터페이스(CLI) 도구입니다.
+            * Electron 앱을 개발, 테스트, 패키징, 배포하기 위한 편리한 명령어를 제공합니다.
+            * CLI를 사용하면 Electron Forge가 제공하는 주요 기능을 쉽게 실행할 수 있습니다.
+
+        왜 --save-dev를 사용하는가?
+            * 개발 중에만 필요한 패키지를 설치할 때 사용합니다.
+            (예: 빌드 도구, 테스트 프레임워크, 개발 서버)
+            * Electron Forge는 앱의 최종 사용자에게 제공되는 파일에 포함되지 않습니다.
+            * 따라서 배포된 앱에는 필요 없는 패키지이므로 devDependencies로 분리합니다
+
+
+    설명 2_ 터미널 입력 'npx electron-forge import'
+
+        npx: 설치된 Node.js 버전에서 명령을 실행하거나, 지정된 패키지를 임시로 실행합니다.
+        electron-forge import: Electron 프로젝트를 설정합니다.
+            * 필요한 Electron Forge 구성 파일(forge.config.js)과 스크립트를 프로젝트에 추가합니다.
+            * Electron 앱을 빌드하고 배포하는 데 필요한 기본적인 설정을 자동화합니다.
+
+
+    에러 처리 ...
+        npx electron-forge import 를 진행하던 도중 2가지 에러를 직면했다
+            1) 경로상에 공백이있어서 설치에 실패했던 에러 -> 경로 폴더에 공백제거로 해결
+            2) node_modules 폴더에 설치된 'electron' 폴더의 폴더명을 '.electron-zqn6ONtz'로 바꾸라는 이해하기 힘든 터미널 에러안내를 보았다... 이유는 모르겠지만 그대로 폴더명을 바꿔주니 설치가 되었다.
+
+                에러 문구 : found 0 vulnerabilities
+                            ✔ Checking your system
+                            ✔ Locating importable project
+                            ❯ Processing configuration and dependencies
+                            ✖ Installing dependencies
+                                › Failed to install modules: ["electron-squirrel-startup"]
+
+                                With output: Command failed with a non-zero return code (4294963214):
+                                npm install electron-squirrel-startup --save
+
+                                npm ERR! code EBUSY
+                                npm ERR! syscall rename
+                                npm ERR! path ~~~\3.publishing\node_modules\electron\dist\resources\default_app.asar
+                                npm ERR! dest ~~~\3.publishing\node_modules\.electron-zqn6ONtz\dist\resources\default_app.asar
+                                npm ERR! errno -4082
+                                npm ERR! EBUSY: resource busy or locked, rename '~~~\3.publishing\node_modules\electron\dist\resources\default_app.asar' -> '~~~\3.publishing\node_modules\.electron-zqn6ONtz\dist\resources\default_app.asar'
+
+3. 배포 하는 앱의 이름과 아이콘을 설정하기위해서 package.json 로 이동한다.
+
+4. package.json 에서 아래의 내용을 추가하여 앱의 이름을 정의할 수 있다.
+    "productName" : "3.publishing",
+
+    조언 - 인터넷에서 확인한거라 정확하진 않지만 "name"에서 선언한 이름과 "productName"은 같게 설정해야하는 것 같다.
+
+5. package.json 에서 "author" '작성자' 를 작성한다.
+    "author" : "NLNL4358",
+
+6. package.json 에서 "description" '설명' 를 작성한다.
+    "description" : " Electron Publishing Test App ",
+
+7. package.json 에서 "config" 객체를 만들고 아래와 같은 객체를 만든다.
+    이 객체는 @electron-forge/cli를 설치하면서 자동으로 생긴 forge.config.js 에서 가져온것이다.
+     "config" : {
+        "forge" : {
+            "packageConfig" : {
+                "icon" : "./assets/window/window_app_icon" 
+            },
+            "makers": [
+                {
+                  "name": "@electron-forge/maker-squirrel",
+                  "config": {
+                    "name" : "3.publishing"
+                  }
+                },
+                {
+                  "name": "@electron-forge/maker-zip",
+                  "platforms": ["darwin"] << 플랫폼 설정 '윈도우'
+                },
+                {
+                  "name": "@electron-forge/maker-deb",
+                  "config": {}
+                },
+                {
+                  "name": "@electron-forge/maker-rpm",
+                  "config": {}
+                }
+            ]
+        }
+  }
+
+    주의! "icon"을 지정할때 window는 .ico 확장자, mac은 .icns이며 
+    파일의 확장자는 ""안에 넣지않는다! 
+
+8. 이제 "npm run make" 명령어를 이용하여 electron 앱을 만들어 확인할 수 있다.
+
+    주의!! 그냥 npm run make 하니 아래와 같은 에러가 떳다
+        Resolving make targets
+      › Could not find any make targets configured for the "win32" platform.
+
+    Window 에서 npm run make 를 하여 Windows 를 위한 앱을 만들때 
+    Window용 make 타겟이 설정 되지 않아서 발생하는 에러라고 한다.
+    7. 의"markers" 를 자세히 보자!
+

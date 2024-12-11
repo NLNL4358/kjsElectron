@@ -1,0 +1,10 @@
+네이버 로그인을 한 후 
+https://api.chzzk.naver.com/service/v1/channels/followings?page=0&size=505&sortType=FOLLOW
+
+이거로 fetch.get 요청하면 가져올 수 있는것 같다... 
+물론 확정은아닌데 
+
+{"code":200,"message":null,"content":{"totalCount":3,"totalPage":1,"followingList":[{"channelId":"84be298681c287441d614db925803c4d","channel":{"channelId":"84be298681c287441d614db925803c4d","channelName":"자동","channelImageUrl":"https://nng-phinf.pstatic.net/MjAyMzEyMjFfMjY3/MDAxNzAzMTQ3NDQyODEw.CaWCzDAwqefgFlzDbe4e5P6boakBW1go45ASyrOXh8Qg.tnb4GQNC8_YP17rtbh8M6Jbinca4xqHm03N1lT7KUYcg.PNG/6a3c25d2-d7de-4fa0-9e64-a7eb154c8807-profile_image-300x300.png","verifiedMark":true,"activatedChannelBadgeIds":[],"personalData":{"following":{"following":true,"notification":true,"followDate":"2024-12-04 21:58:42"},"privateUserBlock":false}},"streamer":{"openLive":true},"liveInfo":{"liveTitle":"안녕?하세요?저는뽀에2","concurrentUserCount":387,"liveCategoryValue":"패스 오브 엑자일 2"}},{"channelId":"17aa057a8248b53affe30512a91481f5","channel":{"channelId":"17aa057a8248b53affe30512a91481f5","channelName":"김도","channelImageUrl":"https://nng-phinf.pstatic.net/MjAyMzEyMDdfMjA5/MDAxNzAxODc1Mzk0Njgz.4jdg2LkiZM_r-GCnzaLv89BkTh-sWLdYjuYcf_t3IP4g.KhoU7pv7Vk5K4QPKX361Cv7VblSE4LXV5NwjgWETEGkg.PNG/%ED%94%84%EC%82%AC.png","verifiedMark":true,"activatedChannelBadgeIds":[],"personalData":{"following":{"following":true,"notification":true,"followDate":"2024-12-04 21:58:38"},"privateUserBlock":false}},"streamer":{"openLive":false},"liveInfo":{"liveTitle":null,"concurrentUserCount":0,"liveCategoryValue":""}},{"channelId":"034449b176b163a705b9c0e81f7a51c2","channel":{"channelId":"034449b176b163a705b9c0e81f7a51c2","channelName":"인간젤리","channelImageUrl":"https://nng-phinf.pstatic.net/MjAyMzEyMTlfMTE4/MDAxNzAyOTY1NjI3NTI3.3bnkVnoMXk3RJ5TWEy0N-V2Apha8LlF0PzBQzmiQ3yQg.1f_5-wO-xl62N0-sIyKuh8zMAlU67SOXBwXt6CRhxKUg.PNG/9.png","verifiedMark":true,"activatedChannelBadgeIds":[],"personalData":{"following":{"following":true,"notification":true,"followDate":"2024-12-04 21:58:34"},"privateUserBlock":false}},"streamer":{"openLive":true},"liveInfo":{"liveTitle":"안녕하세여 인간젤리","concurrentUserCount":0,"liveCategoryValue":"talk"}}]}}
+
+
+웹에 입력해보니 이런식으로 가져오더라

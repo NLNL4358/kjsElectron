@@ -1,0 +1,71 @@
+0. 바로 react && electron && electron-forge 를 사용할꺼면 이 프로젝트를 기반으로 npm install 만 하면 됨
+
+ ======== 직접 하려면 ========
+
+1. 앞선 4.reactInElectron 에서 forge만 추가하기 위해 
+'npm install --save-dev @electron-forge/cli && npx electron-forge import' 터미널 입력을
+
+2. package.json 에서 아래의 내용 추가 
+    * "productName" : "이름", << 위의 "name"과 같게 설정
+    * "author" : "작성자이름",
+    * "description" : " 앱 설명 ",
+    * "config" : {
+            "forge" : {
+            "packagerConfig" : {
+                "icon" : "./assets/window/window_app_icon"
+            },
+            "makers": [
+                    {
+                    "name": "@electron-forge/maker-squirrel",
+                    "config": {
+                        "name" : "3.publishing"
+                    }
+                    },
+                    {
+                    "name": "@electron-forge/maker-zip",
+                    "platforms": ["win32", "linux", "darwin"]
+                    },
+                    {
+                    "name": "@electron-forge/maker-deb",
+                    "config": {}
+                    },
+                    {
+                    "name": "@electron-forge/maker-rpm",
+                    "config": {}
+                    }
+                ]
+            }
+        }
+
+3. npm run make 명령어로 electron app 을 만든다.
+
+
+
+
+****
+
+주의!! npm run make 했는데 아래와 같은 에러가 뜰 수 있다.
+    ** 원인은 경로가 너무 길어서 생성불가능하다는 에러이니 경로를 짧게해줘야한다. **
+
+❯ Making distributables
+  ✖ Making a squirrel distributable for win32/x64
+    › Failed with exit code: 1
+    Output:
+    'chzzPlayer.nuspec'���� ��Ű���� �����ϰ� �ֽ��ϴ�.
+    ������ ��� ��/�Ǵ� ���� �̸��� �ʹ� ��ϴ�. ����ȭ�� ���� �̸��� 260�� �̸��̾�� �ϸ� ���͸� �̸��� 248�� �̸��̾�� �մϴ�.
+  ✖ Making a zip distributable for win32/x64
+◼ Running postMake hook
+
+(node:17368) [DEP0147] DeprecationWarning: In future versions of Node.js, fs.rmdir(path, { recursive: true }) will be removed. Use fs.rm(path, { recursive: true }) instead
+(Use `node --trace-deprecation ...` to show where the warning was created)
+
+An unhandled rejection has occurred inside Forge:
+Error: Failed with exit code: 1
+Output:
+'chzzPlayer.nuspec'���� ��Ű���� �����ϰ� �ֽ��ϴ�.
+������ ��� ��/�Ǵ� ���� �̸��� �ʹ� ��ϴ�. ����ȭ�� ���� �̸��� 260�� �̸��̾�� �ϸ� ���͸� �̸��� 248�� �̸��̾�� �մϴ�.
+at ChildProcess.<anonymous> (C:\Users\Ncube-DEV\Desktop\businessData\99.kjs_personal\Electron\kjsElectron\5.reaactElectronPublishing\node_modules\electron-winstaller\lib\spawn-promise.js:48:24)
+    at ChildProcess.emit (node:events:514:28)
+    at ChildProcess.emit (node:domain:489:12)
+    at maybeClose (node:internal/child_process:1091:16)
+    at ChildProcess._handle.onexit (node:internal/child_process:302:5)

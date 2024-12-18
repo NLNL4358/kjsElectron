@@ -1,0 +1,79 @@
+# React와 Electron의 관계는 다음과 같다.
+    React는 Electron의 렌더러 프로세스에서 실행되고
+    main.js는 Electron의 메인 프로세스에서 실행된다.
+
+    따라서, 렌더러 프로세스에서 main.js 메인프로세스에 정의된 함수를 호출하려면
+
+     **IPC (Inter-Process Communication)**를 사용해야한다
+
+
+## 흐름은 다음과같다.
+
+    1. React (렌더러 프로세스) → IPC를 통해 이벤트 전송.
+    2. main.js (메인 프로세스) → 이벤트를 받아서 해당 함수 실행.
+    3. React → 필요한 경우 실행 결과를 다시 받을 수 있음.
+
+
+### 구현방법 - 총 3단계의 설정이 필요하다!
+
+1. main.js에 IPC 설치 및 preload 선언, webPreferences 수정, IPC 호출 선언을 해줘야한다.
+
+    1.a ) const { app, BrowserWindow, ipcMain } = require("electron"); << ipcMain 받아옴
+
+        ...
+
+    1.b ) window을 만들때 webPreferences 를 다음과같이 수정한다.
+        webPreferences: {
+            preload: path.join(__dirname, "preload.js"), // preload.js 파일 경로
+            nodeIntegration: false,  // 보안상 이유로 false
+            contextIsolation: true, // ipcAPI를 사용하기 위해 true로 선언!
+        },
+
+    1.c ) 아래처럼 ipc로부터 "change-pip-mode"를 받으면 실행되도록 구현
+    ipcMain.on("change-pip-mode", () => {   
+        changePipMode();
+    });
+
+
+2. preload.js 를 생성한다. (main.js와 같은 경로에) preload.js에서 IPC 와 React를 연결한다
+    preload.js를 사용해 메인 프로세스와 렌더러 프로세스 간 통신을 안전하게 연결해야한다.
+    preload.js 에서는 electron에서 제공하는 contextBridge, ipcRenderer를 이용한다.
+    
+    preload.js ------------------------------------------------------
+    |  const { contextBridge, ipcRenderer } = require("electron");
+    |  
+    |  contextBridge.exposeInMainWorld("electronAPI", {
+    |      changePipMode: () => ipcRenderer.send("change-pip-mode"),
+    |      changeAppMode: () => ipcRenderer.send("change-app-mode"),
+    |  });
+
+
+3. React(JSX)에서 호출하기
+    컴포넌트에서 window.electronAPI를 통해 changePipMode와 changeAppMode를 호출할 수 있게되었다.
+
+    방법은 간단하다. 
+        >>     window.electronAPI.프리로드에서 선언한 함수명();    <<
+    위와같이 호출하면 된다.
+
+ex)
+    import React from "react";
+
+    function App() {
+        const handlePipMode = () => {
+            window.electronAPI.changePipMode();
+        };
+
+        const handleAppMode = () => {
+            window.electronAPI.changeAppMode();
+        };
+
+        return (
+            <div>
+                <h1>Electron React App</h1>
+                <button onClick={handlePipMode}>PIP 모드</button>
+                <button onClick={handleAppMode}>일반 모드</button>
+            </div>
+        );
+    }
+
+    export default App;

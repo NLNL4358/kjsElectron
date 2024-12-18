@@ -18,6 +18,10 @@ out/*
 
 *.sublime*
 
+*.vscode
+*/.vscode
+.*/vscode/*
+
 psd
 thumb
 sketch

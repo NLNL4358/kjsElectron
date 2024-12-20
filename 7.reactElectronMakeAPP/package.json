@@ -1,0 +1,91 @@
+{
+    "name": "7.reactElectronMakeAPP",
+    "version": "0.1.0",
+    "private": true,
+    "dependencies": {
+        "cra-template": "1.2.0",
+        "electron-squirrel-startup": "^1.0.1",
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0",
+        "react-scripts": "5.0.1"
+    },
+    "productName": "7.reactElectronMakeAPP",
+    "author": "NLNL4358",
+    "main": "src/main.js",
+    "description": " Electron을 이용한 리액트 앱을 Build하기 ",
+    "homepage": "./",
+    "scripts": {
+        "start": "concurrently \"npm run react:start\" \"npm run electron\" ",
+        "react:start": "react-scripts start",
+        "clean": "rimraf build",
+        "build": "npm run clean && react-scripts build",
+        "test": "react-scripts test",
+        "eject": "react-scripts eject",
+        "electron": "wait-on http://127.0.0.1:3000 && electron-forge start",
+        "package": "electron-forge package",
+        "make": "npm run build && electron-forge make"
+    },
+    "config": {
+        "forge": {
+            "packagerConfig": {
+                "icon": "./public/window_app_icon"
+            },
+            "makers": [
+                {
+                    "name": "@electron-forge/maker-squirrel",
+                    "config": {
+                        "name": "6.ReactElectronIPC"
+                    }
+                },
+                {
+                    "name": "@electron-forge/maker-zip",
+                    "platforms": [
+                        "win32",
+                        "linux",
+                        "darwin"
+                    ]
+                },
+                {
+                    "name": "@electron-forge/maker-deb",
+                    "config": {}
+                },
+                {
+                    "name": "@electron-forge/maker-rpm",
+                    "config": {}
+                }
+            ]
+        }
+    },
+    "eslintConfig": {
+        "extends": [
+            "react-app",
+            "react-app/jest"
+        ]
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "devDependencies": {
+        "@electron-forge/cli": "^7.6.0",
+        "@electron-forge/maker-deb": "^7.6.0",
+        "@electron-forge/maker-rpm": "^7.6.0",
+        "@electron-forge/maker-squirrel": "^7.6.0",
+        "@electron-forge/maker-zip": "^7.6.0",
+        "@electron-forge/plugin-auto-unpack-natives": "^7.6.0",
+        "@electron-forge/plugin-fuses": "^7.6.0",
+        "@electron/fuses": "^1.8.0",
+        "concurrently": "^9.1.0",
+        "electron": "^33.2.1",
+        "rimraf": "^6.0.1",
+        "wait-on": "^8.0.1"
+    }
+}

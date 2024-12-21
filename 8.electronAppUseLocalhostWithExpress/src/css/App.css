@@ -1,0 +1,32 @@
+.App {
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--background-dark);
+
+    position: relative;
+}
+
+.developNoteWrap {
+    position: fixed;
+    right: 0;
+    top: 0;
+
+    gap: 0.5rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+
+    pointer-events: none;
+
+    transform: scale(0.7);
+    opacity: 0.3;
+}
+
+.developNote {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+}

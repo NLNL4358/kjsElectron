@@ -77,3 +77,6 @@
 
     요약하면 app.isPackaged는 패키징된 즉, 빌드된 앱일때는 위의 경로를 이용해 index.html을 찾고
     개발환경일때는 localhost에서 찾는다 라는 뜻이다.
+
+
+4. 이제 npm run make 를 하게되면 실행파일이 리액트가 빌드한 index.html 과 js,css를 불러오며 앱이 실햄됨을 확인 할 수있다.
